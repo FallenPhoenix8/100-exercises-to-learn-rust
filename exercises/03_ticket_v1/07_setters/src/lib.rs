@@ -1,8 +1,3 @@
-// TODO: Add &mut-setters to the `Ticket` struct for each of its fields.
-//   Make sure to enforce the same validation rules you have in `Ticket::new`!
-//   Even better, extract that logic and reuse it in both places. You can use
-//   private functions or private static methods for that.
-
 pub struct Ticket {
     title: String,
     description: String,
@@ -10,22 +5,39 @@ pub struct Ticket {
 }
 
 impl Ticket {
-    pub fn new(title: String, description: String, status: String) -> Ticket {
+    fn is_title_valid(title: &String) -> bool {
         if title.is_empty() {
             panic!("Title cannot be empty");
         }
+
         if title.len() > 50 {
             panic!("Title cannot be longer than 50 bytes");
         }
+
+        return true;
+    }
+
+    fn is_description_valid(description: &String) -> bool {
         if description.is_empty() {
             panic!("Description cannot be empty");
         }
         if description.len() > 500 {
             panic!("Description cannot be longer than 500 bytes");
         }
+        return true;
+    }
+
+    fn is_status_valid(status: &String) -> bool {
         if status != "To-Do" && status != "In Progress" && status != "Done" {
             panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
         }
+        return true;
+    }
+
+    pub fn new(title: String, description: String, status: String) -> Ticket {
+        Self::is_title_valid(&title);
+        Self::is_description_valid(&description);
+        Self::is_status_valid(&status);
 
         Ticket {
             title,
@@ -44,6 +56,21 @@ impl Ticket {
 
     pub fn status(&self) -> &String {
         &self.status
+    }
+
+    pub fn set_title(&mut self, title: String) {
+        Self::is_title_valid(&title);
+        self.title = title;
+    }
+
+    pub fn set_description(&mut self, description: String) {
+        Self::is_description_valid(&description);
+        self.description = description;
+    }
+
+    pub fn set_status(&mut self, status: String) {
+        Self::is_status_valid(&status);
+        self.status = status;
     }
 }
 
