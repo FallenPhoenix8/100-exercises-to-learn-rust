@@ -6,10 +6,21 @@
 // collections (e.g. BTreeMap).
 
 /// Return the minimum of two values.
-pub fn min<T>(left: T, right: T) -> T {
+pub fn min<T: PartialOrd>(left: T, right: T) -> T {
     if left <= right {
         left
     } else {
         right
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_min() {
+        assert_eq!(min(1, 2), 1);
+        assert_eq!(min(2, 1), 1);
     }
 }
