@@ -1,8 +1,23 @@
-// TODO: `easy_ticket` should panic when the title is invalid.
-//   When the description is invalid, instead, it should use a default description:
-//   "Description not provided".
 fn easy_ticket(title: String, description: String, status: Status) -> Ticket {
-    todo!()
+    let ticket = Ticket::new(title.clone(), description, status.clone());
+    match ticket {
+        Ok(ticket) => ticket,
+        Err(ticket) => {
+            if ticket.to_lowercase().contains("title") {
+                panic!("{}", ticket);
+            }
+
+            if ticket.to_lowercase().contains("description") {
+                return Ticket {
+                    title,
+                    description: "Description not provided".to_string(),
+                    status,
+                };
+            }
+
+            panic!("Unhandled error: {}", ticket)
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
