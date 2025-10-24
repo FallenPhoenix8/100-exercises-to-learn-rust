@@ -1,9 +1,15 @@
-// TODO: Given a vector of integers, split it in two halves
-//  and compute the sum of each half in a separate thread.
-//  Don't perform any heap allocation. Don't leak any memory.
+use std::thread;
 
 pub fn sum(v: Vec<i32>) -> i32 {
-    todo!()
+    thread::scope(|scope| {
+        let mid = v.len() / 2;
+        let (left_half, right_half) = v.split_at(mid);
+
+        let left_sum = scope.spawn(|| left_half.iter().sum::<i32>());
+        let right_sum = scope.spawn(|| right_half.iter().sum::<i32>());
+
+        left_sum.join().unwrap() + right_sum.join().unwrap()
+    })
 }
 
 #[cfg(test)]
